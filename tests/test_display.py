@@ -3,7 +3,7 @@ import numpy as np
 
 # local
 from bioranges import show_table
-from bioranges.show_table import  RowPresenter
+from bioranges.show_table import  RowPresenter, RowComposer
 
 def test_epty_show_table():
     assert show_table() == ""
@@ -60,3 +60,14 @@ def test_row_presenter_align_by_min_row_width():
         "    1",
         "    2",
         "    3"]
+
+def test_row_compouser():
+    assert list(RowComposer(
+        RowPresenter("name1", "my_type", [1, 2, 3], 5),
+        RowPresenter("name2", "my_type", [1, 2, 3], 5)
+    )) == [
+        "    name1     name2",
+        "<my_type> <my_type>",
+        "        1         1",
+        "        2         2",
+        "        3         3"]

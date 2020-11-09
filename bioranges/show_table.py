@@ -41,3 +41,12 @@ class RowPresenter:
 
     def _ProcessData(self, x):
         return list(map(str, x))
+
+def RowComposer(x1, x2):
+    x1 = iter(x1)
+    x2 = iter(x2)
+    try:
+        while True:
+            yield next(x1) + " " + next(x2)
+    except StopIteration:
+        pass
