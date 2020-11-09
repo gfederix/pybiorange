@@ -3,7 +3,8 @@ import numpy as np
 
 # local
 from bioranges import show_table
-from bioranges.show_table import  RowPresenter, RowComposer
+from bioranges.show_table import RowPresenter, RowComposer
+
 
 def test_epty_show_table():
     assert show_table() == ""
@@ -30,6 +31,7 @@ def test_single_column_show_table_if_name_smaller_than_type_name_must_detect_siz
         "     2\n"
         "     3")
 
+
 def test_row_presenter_align_by_name():
     assert list(RowPresenter("my_name", "t", [1, 2, 3], 5)) == [
         "my_name",
@@ -38,6 +40,7 @@ def test_row_presenter_align_by_name():
         "      2",
         "      3"]
 
+
 def test_row_presenter_align_by_type_name():
     assert list(RowPresenter("name", "my_type", [1, 2, 3], 5)) == [
         "     name",
@@ -45,6 +48,8 @@ def test_row_presenter_align_by_type_name():
         "        1",
         "        2",
         "        3"]
+
+
 def test_row_presenter_align_by_number():
     assert list(RowPresenter("name", "t", [1000000, 2, 3], 5)) == [
         "   name",
@@ -53,6 +58,7 @@ def test_row_presenter_align_by_number():
         "      2",
         "      3"]
 
+
 def test_row_presenter_align_by_min_row_width():
     assert list(RowPresenter("name", "t", [1, 2, 3], 5)) == [
         " name",
@@ -60,6 +66,7 @@ def test_row_presenter_align_by_min_row_width():
         "    1",
         "    2",
         "    3"]
+
 
 def test_row_compouser():
     assert list(RowComposer(
