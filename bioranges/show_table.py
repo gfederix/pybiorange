@@ -7,24 +7,7 @@ def show_table(x=None):
     r1_name, r1_data = r1
     r1_type = type(r1_data).__name__
     r1_width = 5
-    return "\n".join(row_presenter(r1_name, r1_type, r1_data, min_width=r1_width))
-
-
-def cell_presenter(x, width):
-    return "{{:>{}}}".format(width).format(x)
-
-
-def type_cell_presenter(x, width):
-    x = "<{}>".format(x)
-    return cell_presenter(x, width)
-
-
-def row_presenter(name, type, data, min_width):
-    width = min_width
-    name_header = cell_presenter(name, width)
-    type_header = type_cell_presenter(type, width)
-    data_list = list(map(partial(cell_presenter, width=width), data))
-    return [name_header, type_header] + data_list
+    return "\n".join(RowPresenter(r1_name, r1_type, r1_data, min_width=r1_width))
 
 
 class RowPresenter:

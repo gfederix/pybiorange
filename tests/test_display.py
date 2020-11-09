@@ -3,12 +3,7 @@ import numpy as np
 
 # local
 from bioranges import show_table
-from bioranges.show_table import row_presenter, cell_presenter, type_cell_presenter, RowPresenter
-
-
-def test_sum():
-    assert 1 + 1 == 2
-
+from bioranges.show_table import  RowPresenter
 
 def test_epty_show_table():
     assert show_table() == ""
@@ -58,19 +53,10 @@ def test_row_presenter_align_by_number():
         "      2",
         "      3"]
 
-def test_row_presenter():
-    out_array = row_presenter(name="first_name", type="array", data=[1, 2, 3], min_width=12)
-    assert out_array == [
-        "  first_name",
-        "     <array>",
-        "           1",
-        "           2",
-        "           3"]
-
-
-def test_cell_presenter():
-    assert cell_presenter(100, 5) == "  100"
-
-
-def test_cell_presenter():
-    assert type_cell_presenter("some_type", 15) == "    <some_type>"
+def test_row_presenter_align_by_min_row_width():
+    assert list(RowPresenter("name", "t", [1, 2, 3], 5)) == [
+        " name",
+        "  <t>",
+        "    1",
+        "    2",
+        "    3"]
