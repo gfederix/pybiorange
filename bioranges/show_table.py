@@ -1,5 +1,6 @@
 from functools import partial, reduce
 
+
 def show_table(x=None):
     if x is None:
         return ""
