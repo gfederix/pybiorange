@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class Cmp:
+class NCListCMP:
     def __init__(self, start, end, i):
         self.start = start
         self.end = end
@@ -14,8 +14,9 @@ class Cmp:
 
     def __gt__(self, other):
         return (
-            self.start[self.i] > other.end[other.i]
-            or self.start[self.i] > other.start[other.i])
+            self.start[self.i] > other.start[other.i]
+            or (self.start[self.i] == other.start[other.i]
+                and self.end[self.i] < other.end[other.i]))
 
 
 class RangeIndex:
@@ -34,5 +35,5 @@ class RangeIndex:
 
     def _sort_index(self):
         # idx = sorted(self.index, key=lambda i: self.start[i])
-        idx = sorted(self.index, key=lambda i: Cmp(self.start, self.end, i))
+        idx = sorted(self.index, key=lambda i: NCListCMP(self.start, self.end, i))
         self.index = np.array(idx, dtype=int)
