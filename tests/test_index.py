@@ -15,9 +15,16 @@ def test_range_index_for_unsorted_non_intersected_ranges():
     idx = RangeIndex(start=np.array([10, 1]), end=np.array([20, 2]))
     assert_array_equal(idx.index, [1, 0])
 
-def test_range_index_for_unsorted_intersected_ranges():
+
+def test_range_index_for_unsorted_nested_ranges():
     idx = RangeIndex(
         #                0   1   2  3
-        start=np.array([10,  1,  2, 3]),
+        start=np.array([10,  1,  4, 3]),
         end=np.array(  [20, 10, 11, 4]))
     assert_array_equal(idx.index, [1, 3, 2, 0])
+
+    idx2 = RangeIndex(
+        #                0   1   2  3
+        start=np.array([10,  1,  4, 4]),
+        end=np.array(  [20, 10, 11, 10]))
+    assert_array_equal(idx2.index, [1, 2, 3, 0])
