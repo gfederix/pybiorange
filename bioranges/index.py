@@ -1,6 +1,7 @@
 import numpy as np
 from typing import List, Iterable, Callable
 
+
 class NCListCMP:
     def __init__(self, start, end, i):
         self.start = start
@@ -42,6 +43,16 @@ class RangeIndex:
 
 
 class NCList:
+    '''
+    Algorithm from doi:10.1093/bioinformatics/btl647
+    Nested Containment List (NCList): a new algorithm
+    for accelerating interval query of genome alignment
+    and interval databases
+    Authors: Alexander V. Alekseyenko and Christopher J. Lee
+
+    Unfortunately no supplementary data available.
+    So no pseudocode of building nclist algorithm which in supplimentary.
+    '''
     def __init__(self, value, childs=None):
         if childs is None:
             self.childs = []
@@ -69,5 +80,15 @@ class NCList:
             for c in childs:
                 if is_overlap(c.value):
                     yield c.value
-                    if len(c.childs):
+                    if len(c.childs) != 0:
                         childs_of_intersected += [c.childs]
+
+
+class AIList:
+    '''
+    doi: http://dx.doi.org/10.1101/593657
+    Augmented Interval List: a novel data structure for efficient
+    genomic interval search
+    Authors: Jianglin Feng, Aakrosh Ratan, and Nathan C. Sheffield
+    '''
+    pass
