@@ -1,5 +1,5 @@
 import numpy as np
-from typing import List, Iterable, Callable
+from typing import List, Tuple, Iterable, Callable
 
 
 class NCListCMP:
@@ -35,7 +35,7 @@ class RangeIndex:
         return idx
 
     def _sort_index(self):
-        # idx = sorted(self.index, key=lambda i: self.start[i])
+        # TODO: move to NCList builder. While it's NCList specific sorting
         idx = sorted(
             self.index,
             key=lambda i: NCListCMP(self.start, self.end, i))
@@ -44,36 +44,56 @@ class RangeIndex:
 
 class NCList:
     '''
-    Algorithm from doi:10.1093/bioinformatics/btl647
-    Nested Containment List (NCList): a new algorithm
-    for accelerating interval query of genome alignment
-    and interval databases
+    Algorithm from
+    Nested Containment List (NCList): a new algorithm for accelerating interval
+    query of genome alignment and interval databases
+
     Authors: Alexander V. Alekseyenko and Christopher J. Lee
 
-    Unfortunately no supplementary data available.
-    So no pseudocode of building nclist algorithm which in supplimentary.
+    doi: https://dx.doi.org/10.1093/bioinformatics/btl647
+
+    Unfortunately no supplementary data available. So I have no pseudocode of
+    building NCList algorithm which in supplementary.
     '''
     def __init__(self, value, childs=None):
-        if childs is None:
-            self.childs = []
-        else:
-            self.childs = childs
+        self.childs_count = 0
         self.value = value
+        self.childs = [] if childs is None else childs
+        for c in self.childs:
+            self.childs_count += 1 + c.childs_count
 
     def __eq__(self, other):
-        try:
-            return self.value == other.value
-        except AttributeError:
+        # TODO: unwind recursion someday
+        if not hasattr(other, 'value'):
             return self.value == other
+        childs = self.childs
+        other_childs = other.childs
+        if self.value != other.value:
+            return False
+        if len(self.childs) != len(other.childs):
+            return False
+        for i in range(len(childs)):
+            if childs[i] != other_childs[i]:
+                return False
+        return True
 
     def __iter__(self) -> Iterable['NCList']:
         for child in self.childs:
             yield child
 
+    def append(self, x: 'NCList'):
+        self.childs.append(x)
+        self.childs_count += 1 + x.childs_count
+
+    def __len__(self):
+        return self.childs_count
+
     def find_overlap_index(
             self,
             is_overlap: Callable[[int], bool]) -> Iterable[int]:
         # TODO: make binary search instead iteration within childrens list!!!!
+        # TODO: move to another class. Probably to RangeIndex. While it's
+        # probably more common function. And shuld be usable with AIList...
         childs_of_intersected = [self.childs]
         while len(childs_of_intersected) != 0:
             childs = childs_of_intersected.pop()
@@ -84,11 +104,50 @@ class NCList:
                         childs_of_intersected.append(c.childs)
 
 
+def build_nclist(
+        x: Iterable[Tuple[int, int]],
+        is_contains: Callable[[Tuple[int, int], Tuple[int, int]], bool]
+) -> NCList:
+    return NCList(None)
+
+
+class Interval:
+    def __init__(self, start: int, end: int):
+        self.start = start
+        self.end = end
+
+    def contains(self, other):
+        return self.start >= other.start and other.end >= self.end
+
+
+class Intervals:
+    def __init__(self, start: int, end: int):
+        self.start = start
+        self.end = end
+
+    def __getitem__(self, i):
+        return Interval(self.start[i], self.end[i])
+
+
+class NCListBuilder:
+    def __init__(self, intervals):
+        self.intervals = intervals
+        self.index = np.array([], dtype=int)
+
+    def _construct_nclist(self):
+        root = NCList(None)
+        for i in self.index:
+            interval = self.intervals[i]
+        return root
+
+
 class AIList:
     '''
-    doi: http://dx.doi.org/10.1101/593657
-    Augmented Interval List: a novel data structure for efficient
-    genomic interval search
+    Augmented Interval List: a novel data structure for efficient genomic
+    interval search
+
     Authors: Jianglin Feng, Aakrosh Ratan, and Nathan C. Sheffield
+
+    doi: https://dx.doi.org/10.1101/593657
     '''
     pass
