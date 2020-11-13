@@ -66,7 +66,7 @@ class NCList:
         except AttributeError:
             return self.value == other
 
-    def __iter__(self):
+    def __iter__(self) -> Iterable['NCList']:
         for child in self.childs:
             yield child
 
