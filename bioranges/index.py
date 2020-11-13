@@ -81,7 +81,7 @@ class NCList:
                 if is_overlap(c.value):
                     yield c.value
                     if len(c.childs) != 0:
-                        childs_of_intersected += [c.childs]
+                        childs_of_intersected.append(c.childs)
 
 
 class AIList:
