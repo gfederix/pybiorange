@@ -4,7 +4,8 @@ import numpy as np
 from numpy.testing import assert_array_equal
 from typing import List, Tuple, Iterable
 from bioranges import RangeIndex
-from bioranges.index import NCList, NCListBuilder, build_nclist, Intervals
+from bioranges.index import NCList, NCListBuilder, build_nclist, Intervals, Interval
+
 
 # Utils & test for them
 def start_end_from_zipped(
@@ -19,7 +20,13 @@ def test_start_end_from_zipped():
     assert_array_equal(e, [10, 20])
 
 
-# Tests
+# Tests Intervals
+def test_interval():
+    assert Interval(1, 10).contain(Interval(2, 8))
+    assert not Interval(1, 10).contain(Interval(8, 11))
+    assert Interval.Null().contain(Interval(10000,  100000000))
+
+#  Test RageIndex
 def test_range_index_for_sorted_non_intersected_ranges():
     idx = RangeIndex(start=np.array([1, 10]), end=np.array([2, 20]))
     assert_array_equal(idx.index, [0, 1])
@@ -44,6 +51,7 @@ def test_range_index_for_unsorted_nested_ranges():
     assert_array_equal(idx2.index, [1, 2, 3, 0])
 
 
+# Test NCList
 def test_empty_nclist():
     NCList(0)
 
@@ -86,7 +94,8 @@ def test_search_in_builded_nc_list():
         NCList(3)])
     assert list(nc.find_overlap_index(lambda i: a[i])) == [1, 2, 4, 5]
 
-# @pytest.mark.skip("enable after NCList compare will be done")
+
+# Test NCListBuilder
 def test_building_nc_list_on_sorted_data():
     '''
       1 2 3 4 5 6 7 8 9 10 11
@@ -99,9 +108,7 @@ def test_building_nc_list_on_sorted_data():
     '''
     r = [(3, 5), (4, 6), (9, 10), (8, 10), (3, 6)]
     idx = np.array([4, 0, 1, 3, 2], dtype=int)
-    # nc = NCList(None)
-    # assert build_nclist(np.array(r)[idx], lambda x, y: True) == NCList(None)
     s, e = start_end_from_zipped(r)
     ncb = NCListBuilder(Intervals(s, e))
     ncb.index = idx
-    assert ncb._construct_nclist() == NCList(None, [NCList(4,[NCList(1), NCList(0)]), NCList(3,[NCList(2)])])
+    assert ncb._construct_nclist_from_sorted_index() == NCList(None, [NCList(4,[NCList(0), NCList(1)]), NCList(3,[NCList(2)])])

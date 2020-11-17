@@ -62,6 +62,15 @@ class NCList:
         for c in self.childs:
             self.childs_count += 1 + c.childs_count
 
+    def __repr__(self):
+        if len(self.childs) == 0:
+            return "NCList({})".format(self.value)
+        else:
+            return (
+                "NCList({},[".format(self.value)
+                + ", ".join(map(lambda x: x.__repr__(), self.childs))
+                + "])")
+
     def __eq__(self, other):
         # TODO: unwind recursion someday
         if not hasattr(other, 'value'):
@@ -116,8 +125,15 @@ class Interval:
         self.start = start
         self.end = end
 
-    def contains(self, other):
-        return self.start >= other.start and other.end >= self.end
+    def __repr__(self):
+        return "Interval({}, {})".format(self.start, self.end)
+
+    def contain(self, other):
+        return self.start <= other.start and other.end <= self.end
+
+    class Null:
+        def contain(self, other):
+            return True
 
 
 class Intervals:
@@ -134,11 +150,28 @@ class NCListBuilder:
         self.intervals = intervals
         self.index = np.array([], dtype=int)
 
-    def _construct_nclist(self):
+    def _construct_nclist_from_sorted_index(self):
         root = NCList(None)
+        nclist_pointers = []
         for i in self.index:
-            interval = self.intervals[i]
+            cur_interval = self.intervals[i]
+            cur_nclist = NCList(i)
+            while True:
+                if len(nclist_pointers) == 0:
+                    root.append(cur_nclist)
+                    nclist_pointers.append(cur_nclist)
+                    break
+                prev_nclist = nclist_pointers[len(nclist_pointers) - 1]
+                prev_int = self._get_nclist_interval(prev_nclist)
+                if prev_int.contain(cur_interval):
+                    prev_nclist.append(cur_nclist)
+                    nclist_pointers.append(cur_nclist)
+                    break
+                nclist_pointers.pop()
         return root
+
+    def _get_nclist_interval(self, nclist: NCList):
+        return self.intervals[nclist.value]
 
 
 class AIList:
