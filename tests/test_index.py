@@ -111,4 +111,6 @@ def test_building_nc_list_on_sorted_data():
     s, e = start_end_from_zipped(r)
     ncb = NCListBuilder(Intervals(s, e))
     ncb.index = idx
-    assert ncb._construct_nclist_from_sorted_index() == NCList(None, [NCList(4,[NCList(0), NCList(1)]), NCList(3,[NCList(2)])])
+    assert (
+        ncb._construct_nclist_from_sorted_index()
+        == NCList(None, [NCList(4,[NCList(0), NCList(1)]), NCList(3,[NCList(2)])]))

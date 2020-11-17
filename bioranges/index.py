@@ -156,18 +156,16 @@ class NCListBuilder:
         for i in self.index:
             cur_interval = self.intervals[i]
             cur_nclist = NCList(i)
-            while True:
-                if len(nclist_pointers) == 0:
-                    root.append(cur_nclist)
-                    nclist_pointers.append(cur_nclist)
-                    break
+            while len(nclist_pointers) != 0:
                 prev_nclist = nclist_pointers[len(nclist_pointers) - 1]
                 prev_int = self._get_nclist_interval(prev_nclist)
                 if prev_int.contain(cur_interval):
                     prev_nclist.append(cur_nclist)
-                    nclist_pointers.append(cur_nclist)
                     break
                 nclist_pointers.pop()
+            else:
+                root.append(cur_nclist)
+            nclist_pointers.append(cur_nclist)
         return root
 
     def _get_nclist_interval(self, nclist: NCList):
