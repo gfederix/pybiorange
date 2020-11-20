@@ -64,12 +64,10 @@ class NCList:
 
     def __repr__(self):
         if len(self.childs) == 0:
-            return "NCList({})".format(self.value)
+            return f"NCList({self.value})"
         else:
-            return (
-                "NCList({},[".format(self.value)
-                + ", ".join(map(lambda x: x.__repr__(), self.childs))
-                + "])")
+            child_repr_str = ", ".join(map(repr, self.childs))
+            return f"NCList({self.value}, [{child_repr_str}])"
 
     def __eq__(self, other):
         # TODO: unwind recursion someday
@@ -126,7 +124,7 @@ class Interval:
         self.end = end
 
     def __repr__(self):
-        return "Interval({}, {})".format(self.start, self.end)
+        return f"Interval({self.start}, {self.end})"
 
     def contain(self, other):
         return self.start <= other.start and other.end <= self.end

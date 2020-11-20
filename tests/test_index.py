@@ -114,3 +114,7 @@ def test_building_nc_list_on_sorted_data():
     assert (
         ncb._construct_nclist_from_sorted_index()
         == NCList(None, [NCList(4,[NCList(0), NCList(1)]), NCList(3,[NCList(2)])]))
+
+def test_nclist_repr():
+    assert NCList(None, []).__repr__() == "NCList(None)"
+    assert NCList(None, [NCList(0, [NCList(1), NCList(2)])]).__repr__() == "NCList(None, [NCList(0, [NCList(1), NCList(2)])])"

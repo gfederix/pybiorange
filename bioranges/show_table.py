@@ -25,7 +25,7 @@ class RowPresenter:
             yield self._AlignCell(str(x))
 
     def _AlignCell(self, x):
-        return "{{:>{}}}".format(self.width).format(x)
+        return f"{x:>{f'{self.width}'}}"
 
     def _DetectWidth(self, min_width):
         return max(
@@ -38,7 +38,7 @@ class RowPresenter:
         return str(x)
 
     def _ProcessType(self, x):
-        return "<{}>".format(x)
+        return f"<{x}>"
 
     def _ProcessData(self, x):
         return list(map(str, x))
