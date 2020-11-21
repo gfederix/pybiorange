@@ -1,5 +1,9 @@
+from typing import Callable
+from typing import Iterable
+from typing import List
+from typing import Tuple
+
 import numpy as np
-from typing import List, Tuple, Iterable, Callable
 
 
 class NCListCMP:
@@ -64,10 +68,10 @@ class NCList:
 
     def __repr__(self):
         if len(self.childs) == 0:
-            return f"NCList({self.value})"
+            return f'NCList({self.value})'
         else:
-            child_repr_str = ", ".join(map(repr, self.childs))
-            return f"NCList({self.value}, [{child_repr_str}])"
+            child_repr_str = ', '.join(map(repr, self.childs))
+            return f'NCList({self.value}, [{child_repr_str}])'
 
     def __eq__(self, other):
         # TODO: unwind recursion someday
@@ -85,8 +89,7 @@ class NCList:
         return True
 
     def __iter__(self) -> Iterable['NCList']:
-        for child in self.childs:
-            yield child
+        yield from self.childs
 
     def append(self, x: 'NCList'):
         self.childs.append(x)
@@ -124,7 +127,7 @@ class Interval:
         self.end = end
 
     def __repr__(self):
-        return f"Interval({self.start}, {self.end})"
+        return f'Interval({self.start}, {self.end})'
 
     def contain(self, other):
         return self.start <= other.start and other.end <= self.end

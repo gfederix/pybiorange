@@ -1,14 +1,15 @@
-from functools import partial, reduce
+from functools import partial
+from functools import reduce
 
 
 def show_table(x=None):
     if x is None:
-        return ""
+        return ''
     r1 = x[0]
     r1_name, r1_data = r1
     r1_type = type(r1_data).__name__
     r1_width = 5
-    return "\n".join(RowPresenter(r1_name, r1_type, r1_data, min_width=r1_width))
+    return '\n'.join(RowPresenter(r1_name, r1_type, r1_data, min_width=r1_width))
 
 
 class RowPresenter:
@@ -38,13 +39,13 @@ class RowPresenter:
         return str(x)
 
     def _ProcessType(self, x):
-        return f"<{x}>"
+        return f'<{x}>'
 
     def _ProcessData(self, x):
         return list(map(str, x))
 
 
-def RowComposer(*args, sep=" "):
+def RowComposer(*args, sep=' '):
     first_iter, *iters = list(map(iter, args))
     try:
         for x in first_iter:

@@ -1,5 +1,5 @@
-import pytest
 import numpy as np
+import pytest
 
 from bioranges import BioRange
 
@@ -18,4 +18,3 @@ def test_biorange_stright_indexing():
     assert r[0].size() == 1
     assert r[:2].size() == 2
     assert r[0:2].size() == 2
-

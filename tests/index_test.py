@@ -1,17 +1,24 @@
-import pytest
+from typing import Iterable
+from typing import List
+from typing import Tuple
 
 import numpy as np
+import pytest
 from numpy.testing import assert_array_equal
-from typing import List, Tuple, Iterable
+
 from bioranges import RangeIndex
-from bioranges.index import NCList, NCListBuilder, build_nclist, Intervals, Interval
+from bioranges.index import build_nclist
+from bioranges.index import Interval
+from bioranges.index import Intervals
+from bioranges.index import NCList
+from bioranges.index import NCListBuilder
 
 
 # Utils & test for them
 def start_end_from_zipped(
         it: Iterable[Tuple[int, int]]) -> Tuple[Tuple[int], Tuple[int]]:
     x = list(zip(*it))
-    return map(np.array, x)
+    return tuple(map(np.array, x))
 
 
 def test_start_end_from_zipped():
@@ -76,9 +83,9 @@ def test_counting_nc_list_on_modification_and_creation():
 
 
 @pytest.mark.skip(
-    "Not shure about this."
-    "Probably i need use __len__() instead child."
-    "Shuld I count all neasted childs or just nearest childs?")
+    'Not shure about this.'
+    'Probably i need use __len__() instead child.'
+    'Shuld I count all neasted childs or just nearest childs?')
 def test_nc_list_child_interfaces():
     assert NCList(None).childs() == 0
 
@@ -116,5 +123,5 @@ def test_building_nc_list_on_sorted_data():
         == NCList(None, [NCList(4,[NCList(0), NCList(1)]), NCList(3,[NCList(2)])]))
 
 def test_nclist_repr():
-    assert NCList(None, []).__repr__() == "NCList(None)"
-    assert NCList(None, [NCList(0, [NCList(1), NCList(2)])]).__repr__() == "NCList(None, [NCList(0, [NCList(1), NCList(2)])])"
+    assert NCList(None, []).__repr__() == 'NCList(None)'
+    assert NCList(None, [NCList(0, [NCList(1), NCList(2)])]).__repr__() == 'NCList(None, [NCList(0, [NCList(1), NCList(2)])])'
