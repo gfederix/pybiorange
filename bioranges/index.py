@@ -4,6 +4,7 @@ from typing import List
 from typing import Tuple
 
 import numpy as np
+from nptyping import NDArray
 
 
 class NCListCMP:
@@ -131,18 +132,55 @@ class Interval:
 
 
 class Intervals:
-    def __init__(self, start: int, end: int):
+    start: NDArray[int]
+    end: NDArray[int]
+
+    def __init__(self, start: NDArray[int], end: NDArray[int]):
         self.start = start
         self.end = end
 
     def __getitem__(self, i):
         return Interval(self.start[i], self.end[i])
 
+    def __len__(self):
+        return len(self.start)
+
+
+class NCListIntervalSortMixin:
+    interval: Interval
+
+    def __init__(self, interval):
+        self.interval = interval
+
+    def __eq__(self, other):
+        return (
+            self.interval.start == other.interval.start
+            and self.interval.end == other.interval.end)
+
+    def __gt__(self, other):
+        return (
+            self.interval.start > other.interval.start
+            or (self.interval.start == other.interval.start
+                and self.interval.end < other.interval.end))
+
 
 class NCListBuilder:
-    def __init__(self, intervals):
+    index: NDArray[int]
+    intervals: Intervals
+
+    def __init__(self, intervals: Intervals):
         self.intervals = intervals
-        self.index = np.array([], dtype=int)
+
+    def build(self):
+        self._construct_sorted_index()
+        return self._construct_nclist_from_sorted_index()
+
+    def _construct_sorted_index(self):
+        # TODO: move to NCList builder. While it's NCList specific sorting
+        idx = sorted(
+            range(len(self.intervals)),
+            key=lambda i: NCListIntervalSortMixin(self.intervals[i]))
+        self.index = np.array(idx, dtype=int)
 
     def _construct_nclist_from_sorted_index(self):
         root = NCList(None)

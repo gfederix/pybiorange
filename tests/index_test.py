@@ -21,7 +21,7 @@ def start_end_from_zipped(
 
 
 def test_start_end_from_zipped():
-    s,e = start_end_from_zipped([(1, 10), (2, 20)])
+    s, e = start_end_from_zipped([(1, 10), (2, 20)])
     assert_array_equal(s, [1, 2])
     assert_array_equal(e, [10, 20])
 
@@ -31,6 +31,7 @@ def test_interval():
     assert Interval(1, 10).contain(Interval(2, 8))
     assert not Interval(1, 10).contain(Interval(8, 11))
     assert Interval.Null().contain(Interval(10000,  100000000))
+
 
 #  Test RageIndex
 def test_range_index_for_sorted_non_intersected_ranges():
@@ -101,8 +102,8 @@ def test_search_in_builded_nc_list():
     assert list(nc.find_overlap_index(lambda i: a[i])) == [1, 2, 4, 5]
 
 
-# Test NCListBuilder
-def test_building_nc_list_on_sorted_data():
+@pytest.fixture
+def interval_arrays1():
     '''
       1 2 3 4 5 6 7 8 9 10 11
     0     -----
@@ -115,12 +116,28 @@ def test_building_nc_list_on_sorted_data():
     r = [(3, 5), (4, 6), (9, 10), (8, 10), (3, 6)]
     idx = np.array([4, 0, 1, 3, 2], dtype=int)
     s, e = start_end_from_zipped(r)
+    return s, e, idx
+
+
+# Test NCListBuilder
+def test_sorting_nclist(interval_arrays1):
+    s, e, idx = interval_arrays1
+    ncb = NCListBuilder(Intervals(s, e))
+    ncb._construct_sorted_index()
+    assert_array_equal(ncb.index, idx)
+
+
+def test_building_nclist_on_sorted_data(interval_arrays1):
+    s, e, idx = interval_arrays1
     ncb = NCListBuilder(Intervals(s, e))
     ncb.index = idx
     assert (
         ncb._construct_nclist_from_sorted_index()
-        == NCList(None, [NCList(4,[NCList(0), NCList(1)]), NCList(3,[NCList(2)])]))
+        == NCList(None, [NCList(4, [NCList(0), NCList(1)]),
+                         NCList(3, [NCList(2)])]))
+
 
 def test_nclist_repr():
     assert NCList(None, []).__repr__() == 'NCList(None)'
-    assert NCList(None, [NCList(0, [NCList(1), NCList(2)])]).__repr__() == 'NCList(None, [NCList(0, [NCList(1), NCList(2)])])'
+    assert (NCList(None, [NCList(0, [NCList(1), NCList(2)])]).__repr__()
+            == 'NCList(None, [NCList(0, [NCList(1), NCList(2)])])')
