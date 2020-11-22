@@ -1,8 +1,8 @@
 import numpy as np
 import pytest
 
-from bioranges.bio_range import Range
 from bioranges.overlap import FindOverlaps
+from bioranges.range import Range
 
 def test_find_overlaps():
     r1 = Range(start=np.array([3]), end=np.array([5]))

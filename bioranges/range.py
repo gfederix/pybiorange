@@ -4,9 +4,19 @@ from typing import Optional
 import numpy as np
 from nptyping import NDArray
 
+
+class NullRange:
+    def size(self):
+        return 0
+
+    def __getitem__(self, key):
+        raise IndexError
+
+
 class Range:
     start: NDArray[int]
     end: NDArray[int]
+    Null = NullRange()
 
     def __init__(
             self,

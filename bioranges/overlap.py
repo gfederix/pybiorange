@@ -1,8 +1,8 @@
 from typing import Any
 
-from bioranges.bio_range import Range
 from bioranges.index import NCList
 from bioranges.index import NCListBuilder
+from bioranges.range import Range
 
 class FindOverlaps:
     query: 'Range'
@@ -13,6 +13,5 @@ class FindOverlaps:
         self.query = query
         self.subject = subject
         self.index_builder = index_builder
-
     def __iter__(self):
         yield from [self.subject[2]]
