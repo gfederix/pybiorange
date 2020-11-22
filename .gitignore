@@ -1,0 +1,19 @@
+# Coverage files
+coverage_html_report
+.coverage
+
+# Python files
+__pycache__
+
+# pip files
+.eggs
+*.egg-info
+
+# Pytest files
+.pytest_cache
+
+# Editors
+# emacs
+.\#
+*\~
+.dir-locals.el
