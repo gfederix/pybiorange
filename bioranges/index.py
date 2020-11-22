@@ -114,13 +114,6 @@ class NCList:
                         childs_of_intersected.append(c.childs)
 
 
-def build_nclist(
-        x: Iterable[Tuple[int, int]],
-        is_contains: Callable[[Tuple[int, int], Tuple[int, int]], bool]
-) -> NCList:
-    return NCList(None)
-
-
 class Interval:
     def __init__(self, start: int, end: int):
         self.start = start

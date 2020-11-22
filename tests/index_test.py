@@ -7,7 +7,6 @@ import pytest
 from numpy.testing import assert_array_equal
 
 from bioranges import RangeIndex
-from bioranges.index import build_nclist
 from bioranges.index import Interval
 from bioranges.index import Intervals
 from bioranges.index import NCList
