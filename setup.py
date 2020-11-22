@@ -8,13 +8,20 @@ setup(
     author='Fyodor P. Goncharov',
     author_email='gfederix@gmail.com',
     license='LGPL v3.0 or later',
+    python_requires='>=3.6',
     install_requires=[
         'numpy',
         'pandas',
-        'nptyping'
+        'nptyping',
+        'typing',
     ],
     extras_require={
-        'tests': ['pytest']
+        'tests': [
+            'pytest',
+            'pytest-mypy',
+            'coverage',
+            'pytest-cov'
+        ]
     },
     packages=find_packages(exclude=('tests',)),
 )
