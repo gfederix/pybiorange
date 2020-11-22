@@ -5,6 +5,8 @@ import numpy as np
 from nptyping import NDArray
 
 from bioranges.interval import Intervals
+from bioranges.show_table import RowPresenter
+
 
 class NullRange:
     def size(self):
@@ -42,3 +44,7 @@ class Range:
             start = np.array([start])
             end = np.array([end])
         return Range(start=start, end=end)
+
+    def __repr__(self):
+        return '\n'.join(
+            RowPresenter(name='Interval', type='int', data=self.intervals))

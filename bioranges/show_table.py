@@ -9,7 +9,8 @@ def show_table(x=None):
     r1_name, r1_data = r1
     r1_type = type(r1_data).__name__
     r1_width = 5
-    return '\n'.join(RowPresenter(r1_name, r1_type, r1_data, min_width=r1_width))
+    return '\n'.join(
+        RowPresenter(r1_name, r1_type, r1_data, min_width=r1_width))
 
 
 class RowPresenter:
