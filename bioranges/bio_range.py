@@ -1,8 +1,18 @@
+from typing import Dict
+from typing import Optional
+
 import numpy as np
+from nptyping import NDArray
 
+class Range:
+    start: NDArray[int]
+    end: NDArray[int]
 
-class BioRange:
-    def __init__(self, start=None, end=None):
+    def __init__(
+            self,
+            start: Optional[NDArray[int]] = None,
+            end: Optional[NDArray[int]] = None,
+            data: Optional[Dict] = None):
         if start is None or end is None:
             return
         self.start = start
@@ -17,4 +27,4 @@ class BioRange:
         if type(key) is int:
             start = np.array([start])
             end = np.array([end])
-        return BioRange(start=start, end=end)
+        return Range(start=start, end=end)
