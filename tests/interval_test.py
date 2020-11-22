@@ -21,3 +21,8 @@ def test_intervals_equality():
             Intervals(start=np.array([1, 2]), end=np.array([10, 20])))
     assert (Intervals(start=np.array([1, 2]), end=np.array([10, 20])) !=
             Intervals(start=np.array([1]), end=np.array([10])))
+
+def test_intervals_repr():
+    assert Interval(start=1, end=2).__repr__() == 'Interval(1, 2)'
+    assert (Intervals(start=np.array([1, 10]), end=np.array([2, 15])).__repr__() ==
+            'Intervals:\n1-2\n10-15\n')

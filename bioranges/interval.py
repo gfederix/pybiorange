@@ -44,3 +44,8 @@ class Intervals:
 
     def __eq__(self, other):
         return np.array_equal(self.start, other.start) and np.array_equal(self.end, other.end)
+
+    def __repr__(self):
+        x = map(lambda x: f'{x[0]}-{x[1]}', zip(self.start, self.end))
+        x = '\n'.join(x)
+        return f'Intervals:\n{x}\n'
