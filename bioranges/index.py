@@ -6,6 +6,9 @@ from typing import Tuple
 import numpy as np
 from nptyping import NDArray
 
+from .interval import Interval
+from .interval import Intervals
+
 
 class NCListCMP:
     def __init__(self, start, end, i):
@@ -113,38 +116,6 @@ class NCList:
                     yield c.value
                     if len(c.childs) != 0:
                         childs_of_intersected.append(c.childs)
-
-
-class Interval:
-    def __init__(self, start: int, end: int):
-        self.start = start
-        self.end = end
-
-    def __repr__(self):
-        return f'Interval({self.start}, {self.end})'
-
-    def contain(self, other):
-        return self.start <= other.start and other.end <= self.end
-
-    class Null:
-        def contain(self, other):
-            return True
-
-
-class Intervals:
-    start: NDArray[int]
-    end: NDArray[int]
-
-    def __init__(self, start: NDArray[int], end: NDArray[int]):
-        self.start = start
-        self.end = end
-
-    def __getitem__(self, i):
-        return Interval(self.start[i], self.end[i])
-
-    def __len__(self):
-        return len(self.start)
-
 
 class NCListIntervalSortMixin:
     interval: Interval

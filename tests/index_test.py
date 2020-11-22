@@ -7,10 +7,9 @@ import pytest
 from numpy.testing import assert_array_equal
 
 from bioranges import RangeIndex
-from bioranges.index import Interval
-from bioranges.index import Intervals
 from bioranges.index import NCList
 from bioranges.index import NCListBuilder
+from bioranges.interval import Intervals
 
 
 # Utils & test for them
@@ -24,13 +23,6 @@ def test_start_end_from_zipped():
     s, e = start_end_from_zipped([(1, 10), (2, 20)])
     assert_array_equal(s, [1, 2])
     assert_array_equal(e, [10, 20])
-
-
-# Tests Intervals
-def test_interval():
-    assert Interval(1, 10).contain(Interval(2, 8))
-    assert not Interval(1, 10).contain(Interval(8, 11))
-    assert Interval.Null().contain(Interval(10000,  100000000))
 
 
 #  Test RageIndex
