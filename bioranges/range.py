@@ -4,6 +4,7 @@ from typing import Optional
 import numpy as np
 from nptyping import NDArray
 
+from bioranges.interval import Intervals
 
 class NullRange:
     def size(self):
@@ -14,8 +15,7 @@ class NullRange:
 
 
 class Range:
-    start: NDArray[int]
-    end: NDArray[int]
+    intervals: Intervals
     Null = NullRange()
 
     def __init__(
@@ -25,15 +25,19 @@ class Range:
             data: Optional[Dict] = None):
         if start is None or end is None:
             return
-        self.start = start
-        self.end = end
+        self.intervals = Intervals(start=start, end=end)
 
     def size(self):
-        return len(self.start)
+        return len(self.intervals)
+
+    def __eq__(self, other):
+        if type(other) is NullRange:
+            return False
+        return self.intervals == other.intervals
 
     def __getitem__(self, key):
-        start = self.start.__getitem__(key)
-        end = self.end.__getitem__(key)
+        start = self.intervals.start.__getitem__(key)
+        end = self.intervals.end.__getitem__(key)
         if type(key) is int:
             start = np.array([start])
             end = np.array([end])
