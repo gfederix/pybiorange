@@ -26,9 +26,12 @@ def test_null_range_object():
     assert r1 != Range.Null
     assert r1 != Range.Null
 
+
 def test_range_repr():
     r1 = Range(start=np.array([1, 2, 3]), end=np.array([2, 3, 4]))
-    assert r1.__repr__() == 'Interval\n   <int>\n     1-2\n     2-3\n     3-4'
+    assert (r1.__repr__() ==
+            ' Intervals\n<Interval>\n       1-2\n       2-3\n       3-4')
+
 
 def test_range_equality():
     r1 = Range(start=np.array([1, 2, 3]), end=np.array([2, 3, 4]))

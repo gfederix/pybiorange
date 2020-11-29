@@ -47,4 +47,4 @@ class Range:
 
     def __repr__(self):
         return '\n'.join(
-            RowPresenter(name='Interval', type='int', data=self.intervals))
+            RowPresenter(name='Intervals', type='Interval', data=self.intervals))
