@@ -1,3 +1,4 @@
+from array import array
 from typing import Any
 
 from bioranges.index import NCList
@@ -13,7 +14,19 @@ class FindOverlaps:
 
     def __init__(self, subject, index_builder=NCListBuilder):
         self.subject = subject
-        self.index_builder = index_builder
+        # self.index_builder = index_builder
+        self.index = self.build_index(subject.intervals, index_builder)
+
+    def build_index(self, intervals, index_builder):
+        return index_builder(intervals).build()
+
+    def OVERLAPS_ANY(self, interval):  # TODO: probaly need move to intervals module ???
+        return (
+            lambda subject_idx:
+            self.subject.intervals[subject_idx].start <= interval.end and
+            interval.start <= self.subject.intervals[subject_idx].end)
 
     def query(self, query):
-        yield from [self.subject[1]]
+        for i in query.intervals:
+            idx_iter = self.index.find_overlap_index(self.OVERLAPS_ANY(i))
+            yield self.subject[array('i', idx_iter)]

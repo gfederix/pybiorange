@@ -117,6 +117,7 @@ class NCList:
                     if len(c.childs) != 0:
                         childs_of_intersected.append(c.childs)
 
+
 class NCListIntervalSortMixin:
     interval: Interval
 
