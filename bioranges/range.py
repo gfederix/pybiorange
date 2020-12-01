@@ -1,3 +1,4 @@
+from collections import namedtuple
 from typing import Dict
 from typing import Optional
 
@@ -28,6 +29,9 @@ class Range:
         if start is None or end is None:
             return
         self.intervals = Intervals(start=start, end=end)
+        self._col_names = [] if data is None else list(data.keys())
+        self._data = [] if data is None else list(data.values())
+        self.Row = namedtuple('Row', self._col_names)
 
     def size(self):
         return len(self.intervals)
@@ -47,4 +51,11 @@ class Range:
 
     def __repr__(self):
         return '\n'.join(
-            RowPresenter(name='Intervals', type='Interval', data=self.intervals))
+            RowPresenter(
+                name='Intervals',
+                type='Interval',
+                data=self.intervals))
+
+    def iterrows(self):
+        for x in zip(*self._data):
+            yield self.Row(*x)
