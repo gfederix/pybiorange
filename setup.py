@@ -20,7 +20,8 @@ setup(
             'pytest',
             'pytest-mypy',
             'coverage',
-            'pytest-cov'
+            'pytest-cov',
+            'pytest-mock'
         ]
     },
     packages=find_packages(exclude=('tests',)),
