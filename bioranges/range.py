@@ -41,7 +41,7 @@ class Range:
             return False
         return self.intervals == other.intervals
 
-    def __getitem__(self, key):
+    def __getitem__(self, key) -> 'Range':
         start = self.intervals.start.__getitem__(key)
         end = self.intervals.end.__getitem__(key)
         if type(key) is int:
