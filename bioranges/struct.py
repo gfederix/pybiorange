@@ -1,19 +1,24 @@
 import numpy as np
 
+IUPAC_CODE_MAP = {
+    'A': 'A',
+    'C': 'C',
+    'G': 'G',
+    'T': 'T',
+    'M': 'AC',
+    'R': 'AG',
+    'W': 'AT',
+    'S': 'CG',
+    'Y': 'CT',
+    'K': 'GT',
+    'V': 'ACG',
+    'H': 'ACT',
+    'D': 'AGT',
+    'B': 'CGT',
+    'N': 'ACGT'
+}
 
-class DNAString:
-    def __init__(self, x):
-        pass
-
-    def __len__(self):
-        return 4
-
-    @staticmethod
-    def tobit(x):
-        return 0b00000001
-
-
-DNA_MAP = np.array([            # ..CTGA
+DNA_CHAR_ARRAY = np.array([     # ..CTGA
     '-',                        # 0b0000 -
     'A',                        # 0b0001 A
     'G',                        # 0b0010 G
@@ -32,27 +37,26 @@ DNA_MAP = np.array([            # ..CTGA
     'N',                        # 0b1111 TCGA = aNy
 ])
 
-DNA_BIT_MAP = {i: x for x, i in enumerate(DNA_MAP)}
+DNA_CHAR_TO_BIT_MAP = {char: val for val, char in enumerate(DNA_CHAR_ARRAY)}
 
 
 def complement(x):
     return x >> 2 | (x << 2 & 0b1100)
 
 
-IUPAC_CODE_MAP = {
-    'A': 'A',
-    'C': 'C',
-    'G': 'G',
-    'T': 'T',
-    'M': 'AC',
-    'R': 'AG',
-    'W': 'AT',
-    'S': 'CG',
-    'Y': 'CT',
-    'K': 'GT',
-    'V': 'ACG',
-    'H': 'ACT',
-    'D': 'AGT',
-    'B': 'CGT',
-    'N': 'ACGT'
-}
+class DNAString:
+    def __init__(self, x):
+        self.data = np.array([DNA_CHAR_TO_BIT_MAP[c] for c in x])
+
+    def __len__(self):
+        return len(self.data)
+
+    def __repr__(self):
+        return ''.join(DNA_CHAR_ARRAY[x] for x in self.data)
+
+    def __eq__(self, other):
+        return np.array_equal(self.data, other.data)
+
+    @staticmethod
+    def tobit(x):
+        return 0b00000001
