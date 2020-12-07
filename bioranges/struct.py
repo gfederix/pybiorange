@@ -41,12 +41,27 @@ DNA_CHAR_TO_BIT_MAP = {char: val for val, char in enumerate(DNA_CHAR_ARRAY)}
 
 
 def complement(x):
-    return x >> 2 | (x << 2 & 0b1100)
+    return x >> 2 | (x & 0b00110011) << 2
+
+
+def complement4(x):
+    """For bit complimet for 2 nucleotide paked in 8bit"""
+    return (x & 0b11001100) >> 2 | (x & 0b00110011) << 2
 
 
 class DNAString:
-    def __init__(self, x):
-        self.data = np.array([DNA_CHAR_TO_BIT_MAP[c] for c in x])
+    def __init__(self, x=None):
+        if isinstance(x, str):
+            self.data = np.array(
+                [DNA_CHAR_TO_BIT_MAP[c] for c in x], dtype=np.int8)
+        else:
+            self.data = np.array([], dtype=np.int8)
+
+    @classmethod
+    def from_string(cls, x):
+        self.data = np.array(
+            [DNA_CHAR_TO_BIT_MAP[c] for c in x], dtype=np.int8)
+
 
     def __len__(self):
         return len(self.data)
@@ -60,3 +75,9 @@ class DNAString:
     @staticmethod
     def tobit(x):
         return 0b00000001
+
+    def complement(self):
+        cls = type(self)()
+        cmpl = self.data >> 2 | (self.data << 2 & 0b1100)
+        cls.data = cmpl
+        return cls

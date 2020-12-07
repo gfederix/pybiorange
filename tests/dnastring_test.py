@@ -22,17 +22,30 @@ def test_binarization():
     DNAString.tobit('A') == 0b1
 
 
-def test_complementaryity_in_binarization():
-    # DNAString.tobit("A") == 0b1
-    # DNAString.tobit("T") == 0b1
-    assert DNA_CHAR_TO_BIT_MAP['A'] == complement(DNA_CHAR_TO_BIT_MAP['T'])
-    assert DNA_CHAR_TO_BIT_MAP['G'] == complement(DNA_CHAR_TO_BIT_MAP['C'])
-    assert DNA_CHAR_TO_BIT_MAP['A'] != DNA_CHAR_TO_BIT_MAP['G']
+def test_complement():
+    x = DNAString('AGTC')
+    assert x.complement() == DNAString('TCAG')
 
-    assert DNA_CHAR_TO_BIT_MAP['W'] == complement(DNA_CHAR_TO_BIT_MAP['W'])
-    assert DNA_CHAR_TO_BIT_MAP['S'] == complement(DNA_CHAR_TO_BIT_MAP['S'])
-    assert DNA_CHAR_TO_BIT_MAP['M'] == complement(DNA_CHAR_TO_BIT_MAP['K'])
-    assert DNA_CHAR_TO_BIT_MAP['K'] == complement(DNA_CHAR_TO_BIT_MAP['M'])
-    assert DNA_CHAR_TO_BIT_MAP['N'] == complement(DNA_CHAR_TO_BIT_MAP['N'])
-    assert DNA_CHAR_TO_BIT_MAP['-'] == complement(DNA_CHAR_TO_BIT_MAP['-'])
-    assert DNA_CHAR_TO_BIT_MAP['V'] == complement(DNA_CHAR_TO_BIT_MAP['B'])
+
+def test_complementaryity_in_binarization():
+    def assert_self_complementary_nt(x):
+        assert DNA_CHAR_TO_BIT_MAP[x] == complement(DNA_CHAR_TO_BIT_MAP[x])
+
+    def assert_complementary_nt(x, y):
+        assert DNA_CHAR_TO_BIT_MAP[x] == complement(DNA_CHAR_TO_BIT_MAP[y])
+
+    def assert_notcomplementary_nt(x, y):
+        assert DNA_CHAR_TO_BIT_MAP[x] != complement(DNA_CHAR_TO_BIT_MAP[y])
+
+    assert_notcomplementary_nt('A', 'G')
+    assert_notcomplementary_nt('T', 'C')
+    assert_notcomplementary_nt('A', 'B')
+    assert_complementary_nt('A', 'T')
+    assert_complementary_nt('G', 'C')
+    assert_complementary_nt('M', 'K')
+    assert_complementary_nt('K', 'M')
+    assert_complementary_nt('V', 'B')
+    assert_self_complementary_nt('W')
+    assert_self_complementary_nt('S')
+    assert_self_complementary_nt('N')
+    assert_self_complementary_nt('-')
