@@ -28,14 +28,17 @@ def test_complement():
 
 
 def test_complementaryity_in_binarization():
+    def nt(x):
+        return DNA_CHAR_TO_BIT_MAP[x]
+
     def assert_self_complementary_nt(x):
-        assert DNA_CHAR_TO_BIT_MAP[x] == complement(DNA_CHAR_TO_BIT_MAP[x])
+        assert nt(x) == nt(x)
 
     def assert_complementary_nt(x, y):
-        assert DNA_CHAR_TO_BIT_MAP[x] == complement(DNA_CHAR_TO_BIT_MAP[y])
+        assert nt(x) == complement(nt(y))
 
     def assert_notcomplementary_nt(x, y):
-        assert DNA_CHAR_TO_BIT_MAP[x] != complement(DNA_CHAR_TO_BIT_MAP[y])
+        assert nt(x) != complement(nt(y))
 
     assert_notcomplementary_nt('A', 'G')
     assert_notcomplementary_nt('T', 'C')
