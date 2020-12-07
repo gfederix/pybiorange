@@ -45,7 +45,7 @@ def complement(x):
 
 
 def complement4(x):
-    """For bit complimet for 2 nucleotide paked in 8bit"""
+    """Four bit complement for 2 nucleotide packed in 8bit"""
     return (x & 0b11001100) >> 2 | (x & 0b00110011) << 2
 
 
