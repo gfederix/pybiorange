@@ -1,4 +1,10 @@
+from typing import Iterable
+from typing import List
+from typing import Optional
+from typing import Union
+
 import numpy as np
+from nptyping import NDArray
 
 IUPAC_CODE_MAP = {
     'A': 'A',
@@ -40,28 +46,27 @@ DNA_CHAR_ARRAY = np.array([     # ..CTGA
 DNA_CHAR_TO_BIT_MAP = {char: val for val, char in enumerate(DNA_CHAR_ARRAY)}
 
 
-def complement(x):
+def complement(x: Union[int, NDArray[np.int8]]):
     return x >> 2 | (x & 0b00110011) << 2
 
 
-def complement4(x):
+def complement4(x: Union[int, NDArray[np.int8]]):
     """Four bit complement for 2 nucleotide packed in 8bit"""
     return (x & 0b11001100) >> 2 | (x & 0b00110011) << 2
 
 
 class DNAString:
-    def __init__(self, x=None):
+    data: Optional[NDArray[np.int8]]
+
+    def __init__(self, x: Optional[str] = None):
         if isinstance(x, str):
-            self.data = np.array(
-                [DNA_CHAR_TO_BIT_MAP[c] for c in x], dtype=np.int8)
+            self.init_from_string(x)
         else:
             self.data = np.array([], dtype=np.int8)
 
-    @classmethod
-    def from_string(cls, x):
+    def init_from_string(self, x: str):
         self.data = np.array(
             [DNA_CHAR_TO_BIT_MAP[c] for c in x], dtype=np.int8)
-
 
     def __len__(self):
         return len(self.data)
@@ -73,7 +78,7 @@ class DNAString:
         return np.array_equal(self.data, other.data)
 
     @staticmethod
-    def tobit(x):
+    def tobit(x: str):
         return 0b00000001
 
     def complement(self):
@@ -81,3 +86,8 @@ class DNAString:
         cmpl = self.data >> 2 | (self.data << 2 & 0b1100)
         cls.data = cmpl
         return cls
+
+
+class DNAVec:
+    def __init__(self, x: Iterable[str] = None):
+        pass

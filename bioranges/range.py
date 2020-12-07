@@ -1,5 +1,6 @@
 from collections import namedtuple
 from typing import Dict
+from typing import List
 from typing import Optional
 
 import numpy as np
@@ -19,6 +20,9 @@ class NullRange:
 
 class Range:
     intervals: Intervals
+    _col_names: List[str]
+    _data: List[Dict]
+
     Null = NullRange()
 
     def __init__(
@@ -31,7 +35,7 @@ class Range:
         self.intervals = Intervals(start=start, end=end)
         self._col_names = [] if data is None else list(data.keys())
         self._data = [] if data is None else list(data.values())
-        self.Row = namedtuple('Row', self._col_names)
+        self.Row = namedtuple('Row', self._col_names)  # type: ignore
 
     def size(self):
         return len(self.intervals)

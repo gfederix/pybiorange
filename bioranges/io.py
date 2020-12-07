@@ -9,13 +9,13 @@ TrackLine = namedtuple('TrackLine', ['name'])
 # Range(Dict({})), Range(WigFile())
 class ReadFile(ABC):
     @abstractmethod
-    def trackline() -> TrackLine:
+    def trackline(self) -> TrackLine:
         pass
 
 
 class RangeAdapter(ABC):        # TODO: to acess SQL and etc
     @abstractmethod
-    def trackline() -> TrackLine:
+    def trackline(self) -> TrackLine:
         pass
 
 

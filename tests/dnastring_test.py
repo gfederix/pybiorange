@@ -3,6 +3,7 @@ import pytest
 from bioranges.struct import complement
 from bioranges.struct import DNA_CHAR_TO_BIT_MAP
 from bioranges.struct import DNAString
+from bioranges.struct import DNAVec
 
 
 def test_dna_string():
@@ -52,3 +53,7 @@ def test_complementaryity_in_binarization():
     assert_self_complementary_nt('S')
     assert_self_complementary_nt('N')
     assert_self_complementary_nt('-')
+
+
+def test_dna_vec():
+    DNAVec()
