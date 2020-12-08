@@ -1,3 +1,5 @@
+from abc import ABC
+from abc import abstractmethod
 from typing import Iterable
 from typing import List
 from typing import Optional
@@ -5,6 +7,7 @@ from typing import Union
 
 import numpy as np
 from nptyping import NDArray
+# from collections import Iterable
 
 IUPAC_CODE_MAP = {
     'A': 'A',
@@ -55,12 +58,14 @@ def complement4(x: Union[int, NDArray[np.int8]]):
     return (x & 0b11001100) >> 2 | (x & 0b00110011) << 2
 
 
-class DNAString:
+class DNAStr:
     data: Optional[NDArray[np.int8]]
 
     def __init__(self, x: Optional[str] = None):
         if isinstance(x, str):
             self.init_from_string(x)
+        elif isinstance(x, np.ndarray):
+            self.data = x
         else:
             self.data = np.array([], dtype=np.int8)
 
@@ -82,12 +87,42 @@ class DNAString:
         return 0b00000001
 
     def complement(self):
-        cls = type(self)()
-        cmpl = self.data >> 2 | (self.data << 2 & 0b1100)
-        cls.data = cmpl
-        return cls
+        cls = type(self)
+        nt = self.data >> 2 | (self.data << 2 & 0b1100)
+        return cls(nt)
 
 
-class DNAVec:
-    def __init__(self, x: Iterable[str] = None):
+class Vec(ABC):                 # TODO: move to Range
+    @abstractmethod
+    def resize(self):
         pass
+
+
+class DNAVec(Vec):
+    data: List[Optional[NDArray[np.int8]]]
+
+    def __init__(
+            self,
+            x: Union[Iterable[str], List[NDArray[np.int8]], None] = None):
+        if isinstance(x, List):
+            self.data = x
+        elif isinstance(x, Iterable):
+            self.data = [self.array_from_str(string) for string in x]
+        else:
+            self.data = []
+
+    def array_from_str(self, x: str):
+        return np.array([DNA_CHAR_TO_BIT_MAP[c] for c in x], dtype=np.int8)
+
+    def __iter__(self) -> Iterable[Optional[DNAStr]]:
+        # TODO: Return somthing like DNAstr.NA instead None? Or do not use
+        # DNAStr at all and DNAVec[1] will bee enought?
+        for x in self.data:
+            if x is None:
+                yield None
+            else:
+                yield DNAStr(x)
+
+    def resize(self, x):
+        data = [nt[:x] if len(nt) >= x else None for nt in self.data]
+        return DNAVec(data)

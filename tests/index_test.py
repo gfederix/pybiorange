@@ -16,7 +16,7 @@ from bioranges.interval import Intervals
 def start_end_from_zipped(
         it: Iterable[Tuple[int, int]]) -> Tuple[Tuple[int], Tuple[int]]:
     x = list(zip(*it))
-    return tuple(map(np.array, x))  # type:ignore
+    return tuple(map(np.array, x))  # type: ignore
 
 
 def test_start_end_from_zipped():

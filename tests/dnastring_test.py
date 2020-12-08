@@ -2,30 +2,30 @@ import pytest
 
 from bioranges.struct import complement
 from bioranges.struct import DNA_CHAR_TO_BIT_MAP
-from bioranges.struct import DNAString
+from bioranges.struct import DNAStr
 from bioranges.struct import DNAVec
 
 
 def test_dna_string():
-    dna = DNAString('ATGC')
+    dna = DNAStr('ATGC')
     assert len(dna) == 4
 
 
 def test_dna_string_compare():
-    assert DNAString('ATGC') == DNAString('ATGC')
+    assert DNAStr('ATGC') == DNAStr('ATGC')
 
 
 def test_dna_string_repr():
-    assert DNAString('ATGC').__repr__() == 'ATGC'
+    assert DNAStr('ATGC').__repr__() == 'ATGC'
 
 
 def test_binarization():
-    DNAString.tobit('A') == 0b1
+    DNAStr.tobit('A') == 0b1
 
 
 def test_complement():
-    x = DNAString('AGTC')
-    assert x.complement() == DNAString('TCAG')
+    x = DNAStr('AGTC')
+    assert x.complement() == DNAStr('TCAG')
 
 
 def test_complementaryity_in_binarization():
@@ -56,4 +56,15 @@ def test_complementaryity_in_binarization():
 
 
 def test_dna_vec():
-    DNAVec()
+    d0 = DNAVec()
+    assert list(d0) == []
+    d1 = DNAVec(['ATC', 'GCA'])
+    assert list(d1) == [DNAStr('ATC'), DNAStr('GCA')]
+
+
+def test_dna_vec_resize():
+    d1 = DNAVec(['ATC', 'GCA'])
+    assert list(d1.resize(2)) == [DNAStr('AT'), DNAStr('GC')]
+    assert list(d1.resize(3)) == [DNAStr('ATC'), DNAStr('GCA')]
+    assert list(d1.resize(4)) == [None, None]
+    assert list(DNAVec(['ATC', 'GCACC']).resize(4)) == [None, DNAStr('GCAC')]
